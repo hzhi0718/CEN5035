@@ -4,11 +4,13 @@ import java.awt.event.*;
 import java.io.IOException;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
 
 import client.CircleClientMessageReceiver;
 import client.CircleClientMessageSender;
+import lombok.Builder;
 
-public class CircleClientFrame extends JFrame implements ActionListener {
+public class CircleClientFrame extends JFrame {
 
 	public static int WIDTH = 500;
 	public static int HEIGHT = 400;
@@ -25,12 +27,8 @@ public class CircleClientFrame extends JFrame implements ActionListener {
 
 	public void goOnline() {
 		this.initFrame();
-		this.init();
-		this.startThreads();
-	}
-	
-	public void goOffline() {
-		receiver.isOnline = false;
+		this.initThreads();
+		this.addListeners();
 	}
 	
 	/**
@@ -44,12 +42,11 @@ public class CircleClientFrame extends JFrame implements ActionListener {
 
 		butSend = new JButton("Send");
 		msgField = new JTextField(255);
-		butSend.addActionListener(this);
-
+		
 		textPane.setBounds(5, 5, WIDTH - 25, HEIGHT - 80);
 		msgField.setBounds(5, HEIGHT - 70, WIDTH - 220, 24);
 		butSend.setBounds(WIDTH - 195, HEIGHT - 70, 80, 24);
-
+		
 		add(textPane);
 		add(butSend);
 		add(msgField);
@@ -59,45 +56,41 @@ public class CircleClientFrame extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 		setVisible(true);
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				System.out.println("Client is going offline");
-				goOffline();
-				System.exit(0);
-			}
-		});
 	}
-
+	
+	private void addListeners() {
+		this.addSendButtonActionListener();
+		this.addCloseWindowListener();
+	}
+	
+	private void addSendButtonActionListener() {
+		SendButtonHandler buttonHandler = 
+				SendButtonHandler.builder().msgField(msgField)
+											.textArea(textArea)
+											.sender(sender)
+											.build();
+		butSend.addActionListener(buttonHandler);
+	}
+	
+	private void addCloseWindowListener() {
+		WindowCloseHandler windowCloseHandler = 
+				WindowCloseHandler.builder().receiver(receiver).build();
+		this.addWindowListener((windowCloseHandler));
+	}
+	
 	/**
 	 * Initialize the sender and receiver.
 	 * */
-	private void init() {
+	private void initThreads() {
 		try {
 			sender = new CircleClientMessageSender();
 			receiver = new CircleClientMessageReceiver(textArea);
+			recevierThread = new Thread(receiver);
+			recevierThread.start();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}
-	
-	/**
-	 * Start receiving the message.
-	 * */
-	private void startThreads() {
-		recevierThread = new Thread(receiver);
-		recevierThread.start();
-	}
-	
-	/**
-	 * Handle the event after click the button.
-	 * */
-	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
-		String text = msgField.getText();
-		msgField.setText("");
-		textArea.append(text+"\n");
-		sender.sendText(text);
 	}
 
 }

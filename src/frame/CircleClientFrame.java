@@ -1,15 +1,12 @@
 package frame;
 
-import java.awt.event.*;
-import java.io.IOException;
-
-import javax.swing.*;
-import javax.swing.plaf.basic.BasicOptionPaneUI.ButtonActionListener;
-
 import client.CircleClientMessageReceiver;
 import client.CircleClientMessageSender;
-import lombok.Builder;
 
+import javax.swing.*;
+import java.io.IOException;
+
+@Deprecated
 public class CircleClientFrame extends JFrame {
 
 	public static int WIDTH = 500;
@@ -84,7 +81,7 @@ public class CircleClientFrame extends JFrame {
 	private void initThreads() {
 		try {
 			sender = new CircleClientMessageSender();
-			receiver = new CircleClientMessageReceiver(textArea);
+//			receiver = new CircleClientMessageReceiver(new TestHandler());
 			recevierThread = new Thread(receiver);
 			recevierThread.start();
 		} catch (IOException e) {

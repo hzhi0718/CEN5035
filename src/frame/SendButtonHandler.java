@@ -11,6 +11,7 @@ import javax.swing.JTextField;
 import lombok.Builder;
 import client.CircleClientMessageSender;
 
+@Deprecated
 @Builder
 public class SendButtonHandler implements ActionListener{
 	
@@ -25,7 +26,7 @@ public class SendButtonHandler implements ActionListener{
 		// TODO Auto-generated method stub
 		String text = msgField.getText();
 		msgField.setText("");
-		textArea.append(text+"\n");
-		sender.sendText(text);
+		textArea.append(text + "\n");
+//		sender.sendText(text);
 	}
 }

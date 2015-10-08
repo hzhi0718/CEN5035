@@ -2,12 +2,16 @@ package communication;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 @Builder
 @Getter
+@Setter
+
 public class Message implements Serializable{
 	static public int TEXT = 1;
 	static public int INVITATION = 2;
@@ -17,4 +21,5 @@ public class Message implements Serializable{
 	private ArrayList<String> messageDesIDList;
 	private String messageSrcID;
 	private String messageContent;
+	private String messageTimeStamp;
 }

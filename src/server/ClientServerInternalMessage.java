@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+@Deprecated
 public class ClientServerInternalMessage {
 	
 	@Setter @Getter @Builder

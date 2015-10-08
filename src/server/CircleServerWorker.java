@@ -1,6 +1,7 @@
 package server;
 
 import akka.actor.ActorRef;
+
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import communication.Message;
@@ -10,8 +11,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
+@Deprecated
 @Setter
-public class CircleServerWorker extends UntypedActor  {
+public class CircleServerWorker extends UntypedActor {
 
 	private MessageRouter messageRouter;
 

@@ -1,12 +1,12 @@
 package test;
 
-import java.util.*;
-
+import org.junit.Test;
 import server.CircleServer;
 
 public class CircleServerTest {
-	
-	public static void main(String args[]) throws Exception {
+
+	@Test
+	public void testServer() throws Exception {
 		CircleServer cs = new CircleServer();
 		cs.startService();
 	}

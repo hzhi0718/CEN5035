@@ -6,6 +6,7 @@ import java.awt.event.WindowEvent;
 import client.CircleClientMessageReceiver;
 import lombok.Builder;
 
+@Deprecated
 @Builder
 public class WindowCloseHandler extends WindowAdapter {
 	private CircleClientMessageReceiver receiver;

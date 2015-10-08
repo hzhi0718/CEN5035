@@ -1,35 +1,25 @@
 package client;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.net.*;
+import communication.Message;
+import lombok.Setter;
 
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+
+@Setter
 public class CircleClientMessageSender {
-	
-	private CircleClientConfig config;
 	private Socket socket;
-	private DataOutputStream dout;
+    private ObjectOutputStream objectOutputStream;
 	
 	public CircleClientMessageSender() throws IOException {
-		config = CircleClientConfig.getInstance();
-		socket = config.getSocket();
-		dout = new DataOutputStream(socket.getOutputStream());
+        socket = CircleClientConfig.getInstance().getSocket();
+		objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
 	}
 
-	/**
-	 * Send text message
-	 * */
-	public void sendText(String text) {
-		try {
-			dout.writeUTF(text);
-			dout.flush();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			System.out.println("Text send fail");
-			e.printStackTrace();
-			
-		}
-		
-	}
+    public void sendMessage(Message message) throws IOException {
+        objectOutputStream.writeObject(message);
+        objectOutputStream.flush();
+    }
+
 
 }

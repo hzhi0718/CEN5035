@@ -9,11 +9,18 @@ import communication.Message;
 import lombok.NonNull;
 
 public class MessageRouter {
-	private HashMap<String, Socket> routingMap = new HashMap<String, Socket>();
+	private HashMap<String, ObjectOutputStream> routingMap = new HashMap<String, ObjectOutputStream>();
 	
 	public void insertEntry(@NonNull String id, @NonNull Socket socket) {
-		routingMap.put(id, socket);
-	}
+
+        try {
+            routingMap.put(id, new ObjectOutputStream(socket.getOutputStream()));
+        } catch (IOException e) {
+            System.out.println("Fail to insert socket into routing table");
+            e.printStackTrace();
+        }
+
+    }
 	
 	public void removeEntry(@NonNull String id) {
 		routingMap.remove(id);
@@ -22,9 +29,11 @@ public class MessageRouter {
 	public void forwardMessage(@NonNull Message msg) throws IOException {
         ObjectOutputStream objectOutputStream;
 		for (String DesID : msg.getMessageDesIDList()) {
-			objectOutputStream = new ObjectOutputStream(routingMap.get(DesID).getOutputStream());
-            objectOutputStream.writeObject(msg);
-            objectOutputStream.flush();
+            if (routingMap.containsKey(DesID)) {
+                objectOutputStream = routingMap.get(DesID);
+                objectOutputStream.writeObject(msg);
+                objectOutputStream.flush();
+            }
 		}
 	}
 }

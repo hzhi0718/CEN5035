@@ -19,6 +19,22 @@ public class CircleClient {
     private CircleClientConfig config;
     private String CircleClientID;
 
+    public CircleClient(String ID, ReceiverHandler receiverHandler, String ip, int port) throws IOException{
+        // connect the server
+        CircleClientConfig.IP_ADDRESS = ip;
+        CircleClientConfig.PORT = port;
+        config = CircleClientConfig.getInstance();
+        messageSender = new CircleClientMessageSender();
+        messageReceiver = new CircleClientMessageReceiver(receiverHandler);
+        new Thread(messageReceiver).start();
+        this.CircleClientID = ID;
+        // to notify the server
+        this.sendHandShake();
+    }
+
+    /**
+     * Use default ip and port. (localhost:9999)
+     * */
     public CircleClient(String ID, ReceiverHandler receiverHandler) throws IOException {
         // connect the server
         config = CircleClientConfig.getInstance();
@@ -31,10 +47,13 @@ public class CircleClient {
     }
 
     private void sendHandShake() throws IOException {
-        Message handShakeMessage = Message.builder()
+        /*Message handShakeMessage = Message.builder()
                 .messageType(Message.HANDSHAKE)
                 .messageSrcID(CircleClientID)
-                .build();
+                .build();*/
+        Message handShakeMessage = new Message();
+        handShakeMessage.setMessageType(Message.HANDSHAKE);
+        handShakeMessage.setMessageSrcID(CircleClientID);
         messageSender.sendMessage(handShakeMessage);
     }
 

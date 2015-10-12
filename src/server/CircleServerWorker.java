@@ -1,7 +1,7 @@
+/*
 package server;
 
 import akka.actor.ActorRef;
-
 import akka.actor.Props;
 import akka.actor.UntypedActor;
 import communication.Message;
@@ -62,3 +62,4 @@ public class CircleServerWorker extends UntypedActor {
     }
 
 }
+*/

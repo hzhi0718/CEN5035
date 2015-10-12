@@ -24,6 +24,7 @@ public class CircleServerThread implements Runnable {
 
     private ObjectInputStream objectInputStream;
 
+
     @Override
     public void run() {
         try {

@@ -11,12 +11,13 @@ import java.net.Socket;
 public class CircleClientConfig {
 	
 	// instance
-	static CircleClientConfig config = null;
-	
-	private String IP_ADDRESS = "127.0.0.1";
-	private int PORT = 9999;
-	private InetSocketAddress SOCKET_ADDRESS = new InetSocketAddress(IP_ADDRESS , PORT);
-	private Socket socket; 
+	static private CircleClientConfig config = null;
+
+    //parameters
+	static public String IP_ADDRESS = "127.0.0.1";
+    static 	public int PORT = 9999;
+    static public InetSocketAddress SOCKET_ADDRESS = new InetSocketAddress(IP_ADDRESS , PORT);
+    static private Socket socket;
 	
 	static CircleClientConfig getInstance() {
 		if (config == null) {

@@ -9,5 +9,6 @@ public class CircleServerTest {
 	public void testServer() throws Exception {
 		CircleServer cs = new CircleServer();
 		cs.startService();
+
 	}
 }

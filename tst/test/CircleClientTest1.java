@@ -8,7 +8,7 @@ import org.junit.Test;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class CircleClientTest {
+public class CircleClientTest1 {
 
     private CircleClient client;
 

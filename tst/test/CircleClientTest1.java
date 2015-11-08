@@ -21,7 +21,7 @@ public class CircleClientTest1 {
     public void testTextMessage() throws IOException {
 
         ArrayList<String> desList = new ArrayList<>();
-        desList.add("huang zhi");
+        desList.add("huang zhi2");
         Message message = new Message();
         message.setMessageType(Message.TEXT);
         message.setMessageSrcID("huang zhi");
@@ -30,5 +30,38 @@ public class CircleClientTest1 {
         client.sendTextMessage(message);
         client.sendTextMessage(message);
         client.sendTextMessage(message);
+    }
+
+    @Test
+    public void testVideoMessage() throws IOException {
+
+        ArrayList<String> desList = new ArrayList<>();
+        desList.add("huang zhi2");
+        Message message = new Message();
+        message.setMessageType(Message.VIDEO_INVITATION);
+        message.setMessageSrcID("huang zhi");
+        message.setMessageDesIDList(desList);
+        message.setMessageContent("127.0.0.1");
+        client.startVideoChat(message);
+        while (true) {
+
+        }
+    }
+
+    @Test
+    public void testVoiceMessage() throws IOException {
+
+        ArrayList<String> desList = new ArrayList<>();
+        desList.add("huang zhi2");
+        Message message = new Message();
+        message.setMessageType(Message.VOICE_INVITATION);
+        message.setMessageSrcID("huang zhi");
+        message.setMessageDesIDList(desList);
+        message.setMessageContent("127.0.0.1");
+
+        client.startVoiceChat(message);
+        while (true) {
+
+        }
     }
 }

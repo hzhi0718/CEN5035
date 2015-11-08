@@ -64,5 +64,19 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/../CircleMedia/lib/opencv-300.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <NATIVE>
+          <root url="file://$MODULE_DIR$/../CircleMedia/lib" />
+        </NATIVE>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../CircleMedia/lib/opencv-300.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

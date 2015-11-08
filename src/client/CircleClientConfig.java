@@ -15,10 +15,14 @@ public class CircleClientConfig {
 
     //parameters
 	static public String IP_ADDRESS = "127.0.0.1";
-    static 	public int PORT = 9999;
+    static public int PORT = 9999;
     static public InetSocketAddress SOCKET_ADDRESS = new InetSocketAddress(IP_ADDRESS , PORT);
     static private Socket socket;
-	
+
+    static public int VIDEO_PORT = 9988;
+    static public int VOICE_PORT = 9977;
+    static public int TIME_OUT = 15000;
+
 	static CircleClientConfig getInstance() {
 		if (config == null) {
 			config = new CircleClientConfig();

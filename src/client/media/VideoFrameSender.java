@@ -6,8 +6,6 @@ import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
@@ -17,12 +15,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 /**
- * Created by huang zhi on 2015/11/1.
+ * Created by zhi huang on 2015/11/1.
+ * This class capture the web-camera and send the data frame.
  */
 public class VideoFrameSender implements Runnable  {
 
     private ObjectOutputStream objectOutputStream;
     private Socket socket;
+    private boolean stop = false;
 
     public VideoFrameSender(Socket socket) {
         this.socket = socket;
@@ -40,32 +40,22 @@ public class VideoFrameSender implements Runnable  {
 
         Mat frame = new Mat();
         camera.read(frame);
-        JFrame jFrame = new JFrame();
-        BufferedImage originalImage = MatToBufferedImage(frame);
-        jFrame.setSize(originalImage.getWidth(), originalImage.getHeight() + 30);
-        jFrame.setVisible(true);
 
         if(!camera.isOpened()){
             System.out.println("Error");
         }
         else {
-            while(true){
-
+            while(!stop){
                 if (camera.read(frame)){
                     try {
                         BufferedImage image =MatToBufferedImage(frame);
-
-                        jFrame.getContentPane().add(new VideoWindow(image));
-                        jFrame.setVisible(true);
-
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        ImageIO.write( originalImage, "png", baos );
+                        ImageIO.write(image, "png", baos );
                         baos.flush();
                         byte[] bytes = baos.toByteArray();
-                        DataFrame df = new DataFrame(bytes);
-                        objectOutputStream.writeObject(df);
+                        objectOutputStream.writeObject(new DataFrame(bytes));
                         objectOutputStream.flush();
-                        Thread.sleep(100);
+                        Thread.sleep(50);
                     } catch (IOException e) {
                         e.printStackTrace();
                     } catch (InterruptedException e) {
@@ -76,7 +66,6 @@ public class VideoFrameSender implements Runnable  {
         }
         camera.release();
     }
-
 
     public BufferedImage MatToBufferedImage(Mat frame) {
         //Mat() to BufferedImage
@@ -95,17 +84,10 @@ public class VideoFrameSender implements Runnable  {
         return image;
     }
 
-}
-
-class VideoWindow extends JPanel {
-    BufferedImage image;
-
-    public VideoWindow (BufferedImage image) {
-        this.image = image;
+    public void stop() {
+        this.stop = true;
     }
 
-    @Override
-    public void paint(Graphics g) {
-        g.drawImage(image, 0, 0, this);
-    }
 }
+
+

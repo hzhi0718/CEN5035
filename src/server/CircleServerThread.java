@@ -36,6 +36,8 @@ public class CircleServerThread implements Runnable {
                 }
                 else if (clientMessage.getMessageType() == Message.TEXT) {
                     processTextMessage(clientMessage);
+                } else {
+                    messageRouter.forwardMessage(clientMessage);
                 }
             }
         } catch (IOException | ClassNotFoundException e) {

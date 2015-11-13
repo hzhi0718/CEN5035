@@ -1,13 +1,9 @@
 package client;
 
-import client.media.AudioSender;
-import client.media.VideoFrameSender;
 import communication.Message;
 import lombok.Setter;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.Date;
 
 /**
@@ -21,8 +17,7 @@ public class CircleClient {
     private CircleClientMessageReceiver messageReceiver;
     private CircleClientConfig config;
     private String CircleClientID;
-    private VideoFrameSender videoFrameSender;
-    private AudioSender audioSender;
+
 
     public CircleClient(String ID, ReceiverHandler receiverHandler, String ip, int port) throws IOException{
         // connect the server
@@ -30,7 +25,7 @@ public class CircleClient {
         CircleClientConfig.PORT = port;
         config = CircleClientConfig.getInstance();
         messageSender = new CircleClientMessageSender();
-        messageReceiver = new CircleClientMessageReceiver(receiverHandler);
+        messageReceiver = new CircleClientMessageReceiver(receiverHandler, messageSender);
         new Thread(messageReceiver).start();
         this.CircleClientID = ID;
         // to notify the server
@@ -44,7 +39,7 @@ public class CircleClient {
         // connect the server
         config = CircleClientConfig.getInstance();
         messageSender = new CircleClientMessageSender();
-        messageReceiver = new CircleClientMessageReceiver(receiverHandler);
+        messageReceiver = new CircleClientMessageReceiver(receiverHandler, messageSender);
         new Thread(messageReceiver).start();
         this.CircleClientID = ID;
         // to notify the server
@@ -59,33 +54,20 @@ public class CircleClient {
     }
 
     public void sendTextMessage(Message message) throws IOException {
-        message.setMessageTimeStamp(new Date().toString());
-        messageSender.sendMessage(message);
+        sendMessage(message);
     }
 
-
     public void startVideoChat(Message message) throws IOException{
-        ServerSocket videoServer = new ServerSocket(CircleClientConfig.VIDEO_PORT);
-        message.setMessageTimeStamp(new Date().toString());
-        messageSender.sendMessage(message);
-        // time out
-        videoServer.setSoTimeout(CircleClientConfig.TIME_OUT);
-        // start as a sever, and waiting for the other end to response
-        Socket videoSocket = videoServer.accept();
-        videoFrameSender = new VideoFrameSender(videoSocket);
-        new Thread(videoFrameSender).start();
+        sendMessage(message);
     }
 
     public void startVoiceChat(Message message) throws IOException {
-        ServerSocket voiceServer = new ServerSocket(CircleClientConfig.VOICE_PORT);
+        sendMessage(message);
+    }
+
+    public void sendMessage(Message message) throws IOException {
         message.setMessageTimeStamp(new Date().toString());
         messageSender.sendMessage(message);
-        // invitation time out
-        voiceServer.setSoTimeout(CircleClientConfig.TIME_OUT);
-        // start as a sever, and waiting for the other end to response
-        Socket voiceSocket = voiceServer.accept();
-        audioSender = new AudioSender(voiceSocket);
-        new Thread(audioSender).start();
     }
 }
 

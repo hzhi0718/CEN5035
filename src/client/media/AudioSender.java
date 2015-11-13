@@ -1,7 +1,5 @@
 package client.media;
 
-import communication.DataFrame;
-
 import javax.sound.sampled.*;
 import java.io.IOException;
 import java.io.ObjectOutputStream;

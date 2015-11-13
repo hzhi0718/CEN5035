@@ -4,6 +4,7 @@ import communication.DataFrame;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.net.Socket;
 
 /**
  * Created by zhi huang on 2015/11/1.
- * Retur
+ * Receive, resize and display the frame.
  */
 public class VideoFrameReceiver implements Runnable {
 
@@ -27,11 +28,11 @@ public class VideoFrameReceiver implements Runnable {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("Received Video");
         frame.setLocation(0, 0);
+        frame.setSize(480, 360);
         frame.setVisible(true);
     }
 
     private void paintFrame() {
-        frame.setSize(image.getWidth(), image.getHeight() + 30);
         frame.getContentPane().add(new VideoPanel(image));
         frame.setVisible(true);
     }
@@ -48,12 +49,23 @@ public class VideoFrameReceiver implements Runnable {
             try {
                 DataFrame df = (DataFrame) objectInputStream.readObject();
                 image = ImageIO.read(new ByteArrayInputStream(df.getBytes()));
+                resizeBufferedImage(image);
                 paintFrame();
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("The session is ended.");
+                frame.dispose();
+                break;
             } catch (ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
+    }
+
+    private void resizeBufferedImage(BufferedImage bufferedImage) {
+        int resizeWidth = frame.getWidth(), resizeHeight = frame.getHeight();
+        Image image = bufferedImage.getScaledInstance(resizeWidth, resizeHeight, Image.SCALE_SMOOTH);
+        BufferedImage bufferedResult = new BufferedImage(resizeWidth, resizeHeight, BufferedImage.TYPE_INT_ARGB);
+        bufferedResult.getGraphics().drawImage(image, 0, 0, null);
+        this.image = bufferedResult;
     }
 }

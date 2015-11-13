@@ -4,6 +4,7 @@ import communication.DataFrame;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
+import org.opencv.videoio.Videoio;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -38,6 +39,9 @@ public class VideoFrameSender implements Runnable  {
         System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
         VideoCapture camera = new VideoCapture(0);
 
+        camera.set(Videoio.CAP_PROP_FRAME_WIDTH, 160);
+        camera.set(Videoio.CAP_PROP_FRAME_HEIGHT, 120);
+
         Mat frame = new Mat();
         camera.read(frame);
 
@@ -45,6 +49,7 @@ public class VideoFrameSender implements Runnable  {
             System.out.println("Error");
         }
         else {
+            System.out.println("Start sending video...");
             while(!stop){
                 if (camera.read(frame)){
                     try {
@@ -55,9 +60,10 @@ public class VideoFrameSender implements Runnable  {
                         byte[] bytes = baos.toByteArray();
                         objectOutputStream.writeObject(new DataFrame(bytes));
                         objectOutputStream.flush();
-                        Thread.sleep(50);
+                        Thread.sleep(100);
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        System.out.println("The video chat ended.");
+                        break;
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

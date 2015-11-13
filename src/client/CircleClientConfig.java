@@ -21,7 +21,7 @@ public class CircleClientConfig {
 
     static public int VIDEO_PORT = 9988;
     static public int VOICE_PORT = 9977;
-    static public int TIME_OUT = 15000;
+    static public int TIME_OUT = 300000;
 
 	static CircleClientConfig getInstance() {
 		if (config == null) {
@@ -32,7 +32,9 @@ public class CircleClientConfig {
 	
 	public CircleClientConfig() {
 		socket = new Socket();
+        SOCKET_ADDRESS = new InetSocketAddress(IP_ADDRESS , PORT);
 		try {
+            System.out.println(SOCKET_ADDRESS.toString());
 			socket.connect(SOCKET_ADDRESS);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

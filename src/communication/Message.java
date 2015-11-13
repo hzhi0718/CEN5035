@@ -9,6 +9,13 @@ public class Message implements Serializable{
     static public int VIDEO_INVITATION = 3;
 	static public int HANDSHAKE = 4;
     static public int LINK = 5;
+    static public int VOICE_INVITATION_RESPONSE = 6;
+    static public int VIDEO_INVITATION_RESPONSE = 7;
+    static public int VIDEO_SERVER_READY =8;
+    static public int VOICE_SERVER_READY =9;
+
+    static public String ACCEPT = "ACCEPT";
+    static public String DECLINE = "DECLINE";
 	
 	private int messageType;
 	private ArrayList<String> messageDesIDList;
